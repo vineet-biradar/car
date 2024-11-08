@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .car-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .car-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .car-card img {
+            width: 100%;
+            height: 150px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .car-card h3 {
+            font-size: 18px;
+            color: #333;
+        }
+        .car-card p {
+            font-size: 16px;
+            color: #555;
+        }
+        .car-card button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .car-card button:hover {
+            background-color: #218838;
+        }
+        .cart {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .cart button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Car Gallery</h1>
+        <div class="car-gallery" id="carGallery">
+            <!-- Car Cards will go here -->
+        </div>
+        <div class="cart">
+            <button onclick="checkout()">Proceed to Checkout</button>
+            <p id="cartStatus"></p>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for 10 cars with .jpg images
+        const cars = [
+            { id: 1, name: "Tesla Model S", price: 80000, img: "https://steerev.com/wp-content/uploads/teslas-technological-invnovation-ev.png" },
+            { id: 2, name: "BMW 3 Series", price: 40000, img: "https://carstreetindia.com/blogs/wp-content/uploads/2022/12/bmw-x1-gallery-image-design-01_890.jpg.asset_.1654747357561.jpg" },
+            { id: 3, name: "Audi A4", price: 42000, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI3PgqXcdh-7ZyzdYB0pNO-J3S5V4virmpGA&s" },
+            { id: 4, name: "Mercedes C-Class", price: 45000, img: "https://images.moneycontrol.com/static-mcnews/2024/08/20240813101410_Mercedes-Benz-E-class.jpg?impolicy=website&width=770&height=431" },
+            { id: 5, name: "Ford Mustang", price: 55000, img: "https://revologycars.com/wp-content/uploads/2017/12/Revology-1968-mustang_211.jpeg" },
+            { id: 6, name: "Chevrolet Camaro", price: 53000, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbWjaLK8UmLSB3GJ-u7-qo7_fT9oHgt1xArQ&s" },
+            { id: 7, name: "Porsche 911", price: 120000, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThvLHSQNGAB1RJVNtDavx0XhhXMKA-rTnPUw&s" },
+            { id: 8, name: "Jaguar XF", price: 47000, img: "https://imgd-ct.aeplcdn.com/664x415/n/cw/ec/46994/jaguar-f-type-left-side-view1.jpeg?q=80" },
+            { id: 9, name: "Lexus ES", price: 42000, img: "https://www.lexusindia.co.in/content/dam/lexus-v3-blueprint/discover-lexus/we-are-lexus/lexus-rx/timeline-intro.jpg" },
+            { id: 10, name: "Honda Accord", price: 35000, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYA_vA2KS0evCOnar6WMHLmaW8LUUeU5dtLw&s" }
+        ];
+
+        let cart = [];
+
+        function renderCars() {
+            const carGallery = document.getElementById("carGallery");
+            cars.forEach(car => {
+                const carCard = document.createElement("div");
+                carCard.className = "car-card";
+                carCard.innerHTML = `
+                    <img src="${car.img}" alt="${car.name}">
+                    <h3>${car.name}</h3>
+                    <p>Price: $${car.price}</p>
+                    <button onclick="addToCart(${car.id})">Add to Cart</button>
+                    <button onclick="buyNow(${car.id})">Buy Now</button>
+                `;
+                carGallery.appendChild(carCard);
+            });
+        }
+
+        function addToCart(id) {
+            const car = cars.find(car => car.id === id);
+            if (car && !cart.includes(car)) {
+                cart.push(car);
+                document.getElementById("cartStatus").innerText = `${car.name} added to cart.`;
+            } else {
+                document.getElementById("cartStatus").innerText = `${car.name} is already in the cart.`;
+            }
+        }
+
+        function buyNow(id) {
+            const car = cars.find(car => car.id === id);
+            if (car) {
+                alert(`You have purchased ${car.name} for $${car.price}.`);
+            }
+        }
+
+        function checkout() {
+            if (cart.length > 0) {
+                let items = cart.map(car => car.name).join(", ");
+                alert(`You have purchased: ${items}`);
+                cart = []; // Clear cart after checkout
+                document.getElementById("cartStatus").innerText = "Checkout successful!";
+            } else {
+                alert("Your cart is empty.");
+            }
+        }
+
+        renderCars(); // Initial render
+    </script>
+</body>
+</html>
